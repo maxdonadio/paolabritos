@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+Copyright (c) 2008, 2016 Oracle and/or its affiliates. All rights reserved.
+
+Oracle and Java are registered trademarks of Oracle and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+The contents of this file are subject to the terms of either the GNU
+General Public License Version 2 only ("GPL") or the Common
+Development and Distribution License("CDDL") (collectively, the
+"License"). You may not use this file except in compliance with the
+License. You can obtain a copy of the License at
+http://www.netbeans.org/cddl-gplv2.html
+or nbbuild/licenses/CDDL-GPL-2-CP. See the License for the
+specific language governing permissions and limitations under the
+License.  When distributing the software, include this License Header
+Notice in each file and include the License file at
+nbbuild/licenses/CDDL-GPL-2-CP.  Oracle designates this
+particular file as subject to the "Classpath" exception as provided
+by Oracle in the GPL Version 2 section of the License file that
+accompanied this code. If applicable, add the following below the
+License Header, with the fields enclosed by brackets [] replaced by
+your own identifying information:
+"Portions Copyrighted [year] [name of copyright owner]"
+
+If you wish your version of this file to be governed by only the CDDL
+or only the GPL Version 2, indicate your decision by adding
+"[Contributor] elects to include this software in this distribution
+under the [CDDL or GPL Version 2] license." If you do not indicate a
+single choice of license, a recipient has the option to distribute
+your version of this file under either the CDDL, the GPL Version 2 or
+to extend the choice of license to its licensees as provided above.
+However, if you add GPL Version 2 code and therefore, elected the GPL
+Version 2 license, then the option applies only if the new code is
+made subject to such option by the copyright holder.
+
+Contributor(s):x
+-->
+<hibernate-mapping schema="mydb">
+    <class name = "modelo.Torneo" table = "torneos">
+      
+      <id name = "idTorneo" type = "int" column = "idTorneo">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "sedeTorneo" column = "Sedes_idSede" type="int"/>
+      <property name = "nombreTorneo" column = "NombreTorneo" type = "String"/>
+      <property name = "fechaTorneo" column = "Fecha_torneo" type = "Date"/>
+      <property name = "horaTorneo" column = "Horario_torneo" type = "Date"/>
+      <many-to-one name = "sedeTorneo" column = "idSedes" 
+         class="Sedes" not-null="true"/>
+      <many-to-one name = "disciplinaTorneo" column = "idDisciplina" 
+         class="Disciplinas" not-null="true"/>   
+     </class> 
+     
+    <class name = "modelo.Escuela" table = "escuelas">
+      
+      <id name = "idEscuela" type = "int" column = "idEscuela">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "nombreEscuela" column = "Nombre_escuela" type = "String"/>
+     
+      
+     </class>
+     
+    <class name = "modelo.Torneo" table = "torneo_por_categoria">
+      
+      <id name = "idTorneo" type = "int" column = "Torneos_idTorneo">
+         <generator class="native"/>
+    <many-to-one name = "categoriaTorneo" column = "idCategoria" 
+         class="Categorias" not-null="true"/>
+      </id>
+      
+      <property name = "disciplinaTorneo" column = "Torneos_Disciplinas_idDisciplina" type = "int"/>
+      <property name = "categoriaTorneo" column = "Categorias_idCategoria" type="int"/>
+     </class> //torneoxcat
+     
+     <class name = "modelo.Inscripcion" table = "inscripciones"> //inscripciones
+      
+      <id name = "idInscripcion" type = "int" column = "idInscripcion">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "estadoInscripcion" column = "Estado_inscripcion" type = "String"/>
+      <property name = "torneoInscripcion" column = "NombreTorneo" type = "String"/>
+      <property name = "resultadoCompetidor" column = "Resultado_competidor" type = "int"/>
+      
+      <many-to-one name = "escuelaInscripcion" column = "idEscuela" 
+         class="Escuelas" not-null="true"/>
+      <many-to-one name = "competidorInscripcion" column = "DNI_competidor" 
+         class="Competidor" not-null="true"/>
+      <many-to-one name = "categoriaInscripcion" column = "Categorias_idCategoria" 
+         class="Torneo_por_categoria" not-null="true"/>
+     </class>
+  
+    <class name = "modelo.Disciplina" table = "torneos">
+      
+      <id name = "idDisciplina" type = "int" column = "disciplinas">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "nombreDisciplina" column = "Nombre_disciplina" type = "String"/>
+     </class> //disciplinas
+     
+    <class name = "modelo.Sede" table = "sedes">
+      
+      <id name = "idSede" type = "int" column = "idSede">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "nombreSede" column = "Nombre_sede" type = "String"/>
+      <property name = "provinciaSede" column = "Provincia_sede" type="String"/>
+      <property name = "localidadSede" column = "Localidad_sede" type = "String"/>
+     </class>//sede
+     
+    <class name = "modelo.Categoria" table = "categorias">
+      
+      <id name = "idCategoria" type = "int" column = "idTorneo">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "nombreCategoria" column = "Nombre_categoria" type = "String"/>
+      <property name = "sexoCategoria" column = "Sexo_categoria" type="String"/>
+      <property name = "edadMinima" column = "EdadMinima_categoria" type = "int"/>
+      <property name = "edadMaxima" column = "EdadMaxima_categoria" type = "int"/>
+    </class> //categoria
+    <class name = "modelo.Competidor" table = "competidores">
+      
+      <id name = "idCompetidor" type = "int" column = "DNI_competidor">
+         <generator class="native"/>
+      </id>
+      
+      <property name = "nombreCompetidor" column = "Nombre_competidor" type = "String"/>
+      <property name = "apellidoCompetidor" column = "Apellido_competidor" type="String"/>
+      <property name = "sexoCompetidor" column = "Sexo_competidor" type = "char"/>
+      <property name = "edadCompetidor" column = "Edad_competidor" type = "int"/>
+    </class> //competidor
+</hibernate-mapping>
